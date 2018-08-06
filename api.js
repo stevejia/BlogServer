@@ -51,4 +51,8 @@ router.get('/api/login/getAccount',(req,res) => {
     //     }
     // });
 });
+router.get('/api/article/getCommends', (req, res)=>{
+    
+
+});
 module.exports = router;

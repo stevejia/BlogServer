@@ -27,7 +27,7 @@ app.use(function (req, res, next) {
     var token = req.param("token");
     var tokenStatus = tokenUtil.checkToken(token);
     if(!tokenStatus){
-      return res.send({ tokenStatus: tokenStatus });
+      res.send(401);
     }
     if (req.method === 'OPTIONS') {
       res.send(200)
