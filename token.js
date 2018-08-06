@@ -12,7 +12,7 @@ var token = {
         var base64Str = Buffer.from(JSON.stringify(info), "utf8").toString("base64");
 
         //添加签名，防篡改
-        var has = crypto.createHmac("sha256", _SECRET);
+        var hash = crypto.createHmac("sha256", _SECRET);
         hash.update(base64Str);
         var signature = hash.digest("base64");
         return base64Str + "." + signature;
@@ -34,7 +34,7 @@ var token = {
         //校验签名
         var hash = crypto.createHmac("sha256", _SECRET);
         hash.update(decArr[0]);
-        var checkSignature = has.digest("base64");
+        var checkSignature = hash.digest("base64");
         return {
             payload: payload,
             signature: decArr[1],

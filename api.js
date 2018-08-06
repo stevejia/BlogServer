@@ -2,6 +2,7 @@
 const models = require('./db');
 const express = require('express');
 const router = express.Router();
+const tokenGen = require('./token');
 
 /************** 创建(create) 读取(get) 更新(update) 删除(delete) **************/
 
@@ -52,7 +53,20 @@ router.get('/api/login/getAccount',(req,res) => {
     // });
 });
 router.get('/api/article/getCommends', (req, res)=>{
-    
+    res.send({test: 'articles'});
 
 });
+
+router.post('/api/account/login', (req, res)=>{
+    let userName = req.body.loginInfo.userName;    
+    let isSuccesed = true;
+    if(isSuccesed){
+        console.log( req.body,req.url,req.baseUrl);
+        let token = tokenGen.createToken(userName, 120);
+        let data = {token: token};
+        res.send(data);
+    }
+
+})
+
 module.exports = router;
