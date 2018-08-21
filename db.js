@@ -1,15 +1,22 @@
 var mongoose = require("mongoose");
-var db = mongoose.connect('mongodb://localhost:27017/myblog');
+var db = mongoose.connect('mongodb://localhost:27017/MyBlog');
 console.log("DB connected.");
 var Schema = mongoose.Schema;
 var userInfoSechema = new Schema({
     name: String,
     password: String,
     userid: Number,
+    realName: String,
+    email: String,
+    mobile: String,
+    school: String,
+    region: String,
+    city: String,
+    remark: String
 },{
-    collection: "userinfo"
+    collection: "Users"
 });
 const models = {
-    UserInfo: mongoose.model("userinfo", userInfoSechema)
+    Users: mongoose.model("Users", userInfoSechema)
 }
 module.exports = models;

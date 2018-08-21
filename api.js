@@ -58,15 +58,40 @@ router.get('/api/article/getCommends', (req, res)=>{
 });
 
 router.post('/api/account/login', (req, res)=>{
-    let userName = req.body.loginInfo.userName;    
-    let isSuccesed = true;
-    if(isSuccesed){
-        console.log( req.body,req.url,req.baseUrl);
-        let token = tokenGen.createToken(userName, 120);
-        let data = {token: token};
-        res.send(data);
-    }
-
+    let loginInfo = req.body;
+    let isSuccesed = false;
+    console.log(loginInfo);
+    models.Users.find(loginInfo,(err, users)=>{
+        console.log(users);
+        isSuccesed = !!users.length;
+        if(isSuccesed){
+            let token = tokenGen.createToken(loginInfo.name, 120);
+            let data = {token: token};
+            res.send(data);
+        }else{
+            res.send({message: "用户名或密码不正确"});
+        }
+    });    
 })
+
+router.post('/api/account/register', (req, res)=>{
+    console.log(req, req.body);
+    let userInfo = req.body;
+    models.Users.find({}, (mst,users) => {
+        var number = users.length ? ++users.length : 1;
+        var newAccount = new models.Users({
+            name : userInfo.name,
+            password : userInfo.password,
+            userid: number
+        });
+        newAccount.save((err,data) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send('createAccount successed');
+            }
+        });
+    })
+});
 
 module.exports = router;

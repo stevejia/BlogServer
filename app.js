@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
       console.log(token);
       let tokenStatus = tokenUtil.checkToken(token);
       if(!tokenStatus){
-        res.sendStatus(401);
+        return res.sendStatus(401);
       }else{
         let info = tokenUtil.decodeToken(token);
         let userName = info.payload.data;
@@ -39,7 +39,7 @@ app.use(function (req, res, next) {
         console.log(info);
       }
       if (req.method === 'OPTIONS') {
-        res.send(200)
+        return res.send(200)
       } else {
         next();
       }
