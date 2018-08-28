@@ -94,4 +94,40 @@ router.post('/api/account/register', (req, res)=>{
     })
 });
 
+router.post('/api/basicdata/save', (req, res)=>{
+    console.log(req.body);
+    let data = req.body;
+    let articleTypes = data.articleTypes;
+
+    models.ArticleTypes.find({}, (mst, types)=>{
+        if(types.length === 0){
+            console.log(true);
+            models.ArticleTypes.insertMany(articleTypes);
+        }
+    });
+
+    let blogTypes = data.blogTypes;
+    models.BlogTypes.find({}, (mst, types)=>{
+        if(types.length === 0){
+            console.log(true);
+            models.BlogTypes.insertMany(blogTypes);
+        }
+    });
+});
+router.get('/api/commondata/get', (req, res)=>{
+    let articleTypes = [];
+    let blogTypes = [];
+    models.ArticleTypes.find({}, (mst, types)=>{
+        articleTypes = types;
+        models.BlogTypes.find({}, (mst, types)=>{
+            blogTypes = types;
+            var commonData = {
+                articleTypes: articleTypes,
+                blogTypes: blogTypes
+            }
+            res.send({commonData});
+        });
+    });
+});
+
 module.exports = router;
