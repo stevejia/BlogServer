@@ -24,11 +24,8 @@ app.use(function (req, res, next) {
     // }
     //是否需要验证 登录 注册 相关的请求不需要验证。
     let needAuten = req.header('needAuten');
-    // console.log(needAuten);
-    // console.log(req, req.header('needAuten'), req.header('token'));
     if(needAuten === 'true'){
       let token = req.header('token');
-      console.log(token);
       let tokenStatus = tokenUtil.checkToken(token);
       if(!tokenStatus){
         return res.sendStatus(401);
@@ -36,7 +33,6 @@ app.use(function (req, res, next) {
         let info = tokenUtil.decodeToken(token);
         let userName = info.payload.data;
         let newToken = tokenUtil.createToken(userName, 120);
-        console.log(info);
       }
       if (req.method === 'OPTIONS') {
         return res.send(200)

@@ -3,7 +3,9 @@ const models = require('./db');
 const express = require('express');
 const router = express.Router();
 const tokenGen = require('./token');
-
+const dbUtil = require('./dbutil');
+const system = require('./dl/system');
+const articlesManager = require('./bl/articles');
 /************** 创建(create) 读取(get) 更新(update) 删除(delete) **************/
 
 // 创建账号接口
@@ -60,9 +62,7 @@ router.get('/api/article/getCommends', (req, res)=>{
 router.post('/api/account/login', (req, res)=>{
     let loginInfo = req.body;
     let isSuccesed = false;
-    console.log(loginInfo);
     models.Users.find(loginInfo,(err, users)=>{
-        console.log(users);
         isSuccesed = !!users.length;
         if(isSuccesed){
             let token = tokenGen.createToken(loginInfo.name, 120);
@@ -75,7 +75,6 @@ router.post('/api/account/login', (req, res)=>{
 })
 
 router.post('/api/account/register', (req, res)=>{
-    console.log(req, req.body);
     let userInfo = req.body;
     models.Users.find({}, (mst,users) => {
         var number = users.length ? ++users.length : 1;
@@ -95,13 +94,11 @@ router.post('/api/account/register', (req, res)=>{
 });
 
 router.post('/api/basicdata/save', (req, res)=>{
-    console.log(req.body);
     let data = req.body;
     let articleTypes = data.articleTypes;
 
     models.ArticleTypes.find({}, (mst, types)=>{
         if(types.length === 0){
-            console.log(true);
             models.ArticleTypes.insertMany(articleTypes);
         }
     });
@@ -109,25 +106,33 @@ router.post('/api/basicdata/save', (req, res)=>{
     let blogTypes = data.blogTypes;
     models.BlogTypes.find({}, (mst, types)=>{
         if(types.length === 0){
-            console.log(true);
             models.BlogTypes.insertMany(blogTypes);
         }
     });
 });
-router.get('/api/commondata/get', (req, res)=>{
-    let articleTypes = [];
-    let blogTypes = [];
-    models.ArticleTypes.find({}, (mst, types)=>{
-        articleTypes = types;
-        models.BlogTypes.find({}, (mst, types)=>{
-            blogTypes = types;
-            var commonData = {
-                articleTypes: articleTypes,
-                blogTypes: blogTypes
-            }
-            res.send({commonData});
-        });
-    });
+router.get('/api/commondata/get', async (req, res)=>{
+    let articleTypes = await system.listArticleType({});
+    
+    let blogTypes = await system.listBlogType({});
+    let commonData = {
+        articleTypes: articleTypes,
+        blogTypes: blogTypes
+    };
+    res.send({commonData});
 });
 
+
+router.post('/api/articles/save', async (req, res)=>{
+    let data = req.body;
+    let result = await articlesManager.save(data);
+    console.log(result);
+    res.send(result);
+});
+router.get('/api/articles/list', async (req, res)=>{
+    let query = req.body.query;
+    console.log(query);
+    let result = await articlesManager.list(query);
+    console.log(result);
+    res.send(result);
+});
 module.exports = router;

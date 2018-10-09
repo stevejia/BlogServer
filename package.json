@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "cors": "^2.8.4",
-    "mongoose": "^5.2.6"
+    "mongoose": "^5.2.6",
+    "q": "^1.5.1"
   }
 }

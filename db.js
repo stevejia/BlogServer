@@ -26,7 +26,9 @@ var articleSchema = new Schema({
     blogType: Number,//博客类型
     isPrivate: Boolean,//是否私密
     isDeleted: Boolean,//是否删除
-    isDraft: Boolean,//是否草稿
+    isDraft: Boolean,//是否草稿,
+    articleId: Number,//文章Id,
+    creatorId: Number,//创建人Id
 },{
     collection: "Articles"
 });
