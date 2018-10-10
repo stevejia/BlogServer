@@ -1,6 +1,4 @@
-const Q=require('q');
 const models = require('./db');
-var deffered = Q.defer();
 const returnInfo = {
     data: null,
     message: null
@@ -8,9 +6,7 @@ const returnInfo = {
 var dbUtil = {
     find: async function(collection, queryParams){
         let list = [];
-        await models[collection].find(queryParams, (mst, lst)=>{
-            list = lst;
-        });
+        list = await models[collection].find(queryParams).exec();
         return list;
     },
     save: async function(collection, data){
@@ -22,5 +18,9 @@ var dbUtil = {
         });
         return returnInfo;
     },
+    findOne: async function(collection, queryParams){
+        let data = await models[collection].findOne(queryParams).exec();
+        return data;
+    }
 };
 module.exports = exports = dbUtil;

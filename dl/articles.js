@@ -10,6 +10,10 @@ let articleRep = {
     list: async (query)=>{
         let articles = await dbUtil.find("Articles", query);
         return articles;
+    },
+    get: async(query)=>{
+        let article = await dbUtil.findOne("Articles", query);
+        return article;
     }
 }
 

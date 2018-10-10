@@ -112,7 +112,6 @@ router.post('/api/basicdata/save', (req, res)=>{
 });
 router.get('/api/commondata/get', async (req, res)=>{
     let articleTypes = await system.listArticleType({});
-    
     let blogTypes = await system.listBlogType({});
     let commonData = {
         articleTypes: articleTypes,
@@ -125,14 +124,17 @@ router.get('/api/commondata/get', async (req, res)=>{
 router.post('/api/articles/save', async (req, res)=>{
     let data = req.body;
     let result = await articlesManager.save(data);
-    console.log(result);
     res.send(result);
 });
 router.get('/api/articles/list', async (req, res)=>{
     let query = req.body.query;
-    console.log(query);
     let result = await articlesManager.list(query);
-    console.log(result);
+    res.send(result);
+});
+
+router.get('/api/articles/get', async (req, res)=>{
+    let id = req.body.id;
+    let result = await articlesManager.get(id);
     res.send(result);
 });
 module.exports = router;
