@@ -6,7 +6,10 @@ const tokenGen = require('./token');
 const dbUtil = require('./dbutil');
 const system = require('./dl/system');
 const articlesManager = require('./bl/articles');
+const userManager = require('./bl/user');
 /************** 创建(create) 读取(get) 更新(update) 删除(delete) **************/
+
+let wrap = fn=>(...args) => fn(...args).catch(args[2]);
 
 // 创建账号接口
 router.post('/api/login/createAccount',(req,res) => {
@@ -59,20 +62,17 @@ router.get('/api/article/getCommends', (req, res)=>{
 
 });
 
-router.post('/api/account/login', (req, res)=>{
+router.post('/api/account/login', wrap(async (req, res)=>{
     let loginInfo = req.body;
-    let isSuccesed = false;
-    models.Users.find(loginInfo,(err, users)=>{
-        isSuccesed = !!users.length;
-        if(isSuccesed){
-            let token = tokenGen.createToken(loginInfo.name, 120);
-            let data = {token: token};
-            res.send(data);
-        }else{
-            res.send({message: "用户名或密码不正确"});
-        }
-    });    
-})
+    let userInfo = await userManager.login(loginInfo);
+    console.log(userInfo)
+    let isSuccesed = !!userInfo;
+    if(isSuccesed){
+        let token = tokenGen.createToken(loginInfo.name, 120);
+        let data = {token: token};
+        res.send(data);
+    }
+}));
 
 router.post('/api/account/register', (req, res)=>{
     let userInfo = req.body;

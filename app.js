@@ -6,6 +6,7 @@ const express = require("express");
 const tokenUtil = require("./token");
 var cors = require("cors");
 const app = express();
+const middleWare = require("express-domain-middleware");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -17,11 +18,6 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
     res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    // var token = sessionStorage.getItem("token");
-    // var tokenStatus = token.checkToken(token);
-    // if(!tokenStatus){
-    //   res.send(401);
-    // }
     //是否需要验证 登录 注册 相关的请求不需要验证。
     let needAuten = req.header('needAuten');
     if(needAuten === 'true'){
@@ -44,7 +40,16 @@ app.use(function (req, res, next) {
     }
     
   });
-  
+app.use(middleWare);
+app.use(function errorHandler (err, req, res, next){
+  console.log("66666666");
+  if(err){
+    res.status(400);
+    return res.send(err.message);
+  }
+});  
+app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+
 // });
 //Way2： allow custom header and CORS
 // app.all('/*',function (req, res, next) {
