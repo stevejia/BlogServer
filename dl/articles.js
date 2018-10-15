@@ -1,6 +1,5 @@
 "use strict";
-const models = require('../db');
-const dbUtil = require('../dbutil');
+const dbUtil = require('../util/dbutil');
 
 let articleRep = {
     save: async (data)=>{

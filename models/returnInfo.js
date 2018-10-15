@@ -1,7 +1,6 @@
 class ReturnInfo {
-    constructor(data, message, status=false){
-        this.message = message;
-        this.status = !!message ? true : false;
+    constructor(data, status=true){
+        this.status = status;
         this.data = data;
     }
 }

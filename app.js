@@ -3,10 +3,10 @@ const fs = require("fs");
 const path = require("path");
 const bodyParser = require("body-parser");
 const express = require("express");
-const tokenUtil = require("./token");
+const tokenUtil = require("./util/token");
 var cors = require("cors");
 const app = express();
-const middleWare = require("express-domain-middleware");
+// const middleWare = require("express-domain-middleware");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 //     const html = fs.readFileSync(path.resolve(___dirname, "../"))
 //Way1: use cors dependency and use(*, fun)method
 app.options("*", cors());
-app.use(function (req, res, next) {
+app.use(function (err, req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
     res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
@@ -40,15 +40,6 @@ app.use(function (req, res, next) {
     }
     
   });
-app.use(middleWare);
-app.use(function errorHandler (err, req, res, next){
-  console.log("66666666");
-  if(err){
-    res.status(400);
-    return res.send(err.message);
-  }
-});  
-app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 
 // });
 //Way2： allow custom header and CORS
