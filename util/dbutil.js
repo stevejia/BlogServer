@@ -14,7 +14,7 @@ var dbUtil = {
         await newItem.save((err,data) => {
             if (err) {
                 returnInfo.message = err; 
-            }
+            } 
         });
         return returnInfo;
     },

@@ -16,7 +16,7 @@ var token = {
         hash.update(base64Str);
         var signature = hash.digest("base64");
         return base64Str + "." + signature;
-    },
+    }, 
     decodeToken: function(token){
         var decArr = token.split(".");
         if(decArr.length < 2) {
