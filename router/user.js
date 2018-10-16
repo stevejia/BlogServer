@@ -4,24 +4,14 @@ const wrap = require('../util/asyncErrorHandler');
 const ReturnInfo = require("../models/returnInfo");
 const userManager = require('../bl/user');
 const tokenGen = require('../util/token');
-router.post('/register', (req, res)=>{
+router.post('/register', wrap(async(req, res)=>{
     let userInfo = req.body;
-    models.Users.find({}, (mst,users) => {
-        var number = users.length ? ++users.length : 1;
-        var newAccount = new models.Users({
-            name : userInfo.name,
-            password : userInfo.password,
-            userid: number
-        });
-        newAccount.save((err,data) => {
-            if (err) {
-                res.send(err);
-            } else {
-                res.send('createAccount successed');
-            }
-        });
-    })
-});
+    let existUsers = await userManager.list({});
+    let userId = existUsers && existUsers.length ? ++existUsers.length : 1;
+    userInfo.userid = userId;
+    let returnInfo = await userManager.save(userInfo);
+    res.send(returnInfo);
+}));
 
 router.post('/login', wrap(async (req, res)=>{
     let loginInfo = req.body;
@@ -30,8 +20,8 @@ router.post('/login', wrap(async (req, res)=>{
     let isSuccesed = !!userInfo;
     if(isSuccesed){
         let token = tokenGen.createToken(loginInfo.name, 120);
-        let data = {token: token};
-        res.send(data);
+        let result = new ReturnInfo({token});
+        res.send(result);
     }
 }));
 

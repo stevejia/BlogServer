@@ -9,14 +9,18 @@ const userManager = {
         }
         return userInfo;
     },
-    list: async(query)=>{
-        let list = await articleRep.list(query); 
+    list: async (query)=>{
+        let list = await userRep.list(query); 
         return list;
     },
     get: async (id)=>{
         let query = {id};
-        let article = await articleRep.get(query);
+        let article = await userRep.get(query);
         return article;
+    },
+    async save(userInfo){
+        await userRep.save(userInfo);
+        return new ReturnInfo("");
     }
 }
 module.exports = exports = userManager;

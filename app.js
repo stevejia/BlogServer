@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 //     const html = fs.readFileSync(path.resolve(___dirname, "../"))
 //Way1: use cors dependency and use(*, fun)method
 app.options("*", cors());
-app.use(function (err, req, res, next) {
+app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
     res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
