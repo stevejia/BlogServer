@@ -1,7 +1,9 @@
 const bodyParser = require("body-parser");
 const express = require("express");
-var cors = require("cors");
+const api = require("./api");
+const cors = require("cors");
 const app = express();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 //use cors dependency and use(*, fun)method

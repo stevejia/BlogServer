@@ -3,7 +3,7 @@ const router = express.Router();
 const wrap = require("../util/asyncErrorHandler");
 const { LocalStorage } = require("node-localstorage");
 const localStorage = new LocalStorage("./auth");
-
+const http = require("../utils/http");
 router.post(
   "/ssologin",
   wrap(async function(req, res) {
@@ -11,6 +11,7 @@ router.post(
     console.log(data);
     localStorage.setItem("admin_token", data.token);
     res.sendStatus(200).send(data);
+    return;
   })
 );
 router.get(
@@ -25,6 +26,7 @@ router.get(
     var newToken = data.Data.newToken;
     localStorage.setItem("admin_token", newToken);
     res.sendStatus(200);
+    return;
   })
 );
 router.post(
@@ -34,6 +36,7 @@ router.post(
     await http.get("account/CheckLogin", { oldToken: token });
     localStorage.removeItem("admin_token");
     res.sendStatus(200);
+    return;
   })
 );
 module.exports = exports = router;
