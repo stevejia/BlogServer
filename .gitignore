@@ -8,7 +8,3 @@ dist/*
 src/config/*.tmp
 src/config/env.js
 npm-debug.log
-auth
-auth/*
-.vscode
-.vscode/*
