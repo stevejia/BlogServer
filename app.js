@@ -18,5 +18,6 @@ app.use(function(req, res, next) {
   //是否需要验证 登录 注册 相关的请求不需要验证。
   next();
 });
+//api来源于 router
 app.use(api);
 app.listen(8088);
